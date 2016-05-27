@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>FluentXUnit</id>
+    <version>1.0.0.0</version>
+    <title>FluentXUnit</title>
+    <authors>Kaylee Elúvian</authors>
+    <owners>Kaylee Elúvian</owners>
+    <licenseUrl>https://opensource.org/licenses/MIT</licenseUrl>
+    <projectUrl>https://github.com/ke2083/FluentXUnit</projectUrl>
+    <iconUrl></iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Allows NUnit style fluent assertions within the XUnit framework!</description>
+    <releaseNotes>Initial release.</releaseNotes>
+    <copyright>Copyright 2016</copyright>
+    <tags>XUnit NUnit</tags>
+  </metadata>
+</package>
