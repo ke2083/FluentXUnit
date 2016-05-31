@@ -10,8 +10,8 @@
     <projectUrl>https://github.com/ke2083/FluentXUnit</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/ke2083/FluentXUnit/master/FluentXUnit/FluentXUnit.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Allows NUnit style fluent assertions within the XUnit framework!</description>
-    <releaseNotes>Initial release.</releaseNotes>
+    <description>A drop-in replacement that allows NUnit style fluent assertions within the XUnit framework!</description>
+    <releaseNotes>Updated release with more assertions.</releaseNotes>
     <copyright>Copyright 2016</copyright>
     <tags>XUnit NUnit</tags>
   </metadata>
