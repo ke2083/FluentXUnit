@@ -2,22 +2,30 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace FluentXUnit
 {
     public static class Is
     {
+        public static Func<IEnumerable<T>, bool> Storing<T>(T item)
+        {
+            return (expected) => expected.Contains(item);
+        }
+
         public static Func<T, bool> EqualTo<T>(T actual)
         {
             return (expected) => expected.Equals(actual);
         }
 
-        public static Func<T, bool> LessThan<T>(T actual) where T : struct
+        public static Func<T, bool> LessThan<T>(T actual)
+            where T: struct
         {
             return (expected) => GreaterThan(expected)(actual) == true;
         }
 
-        public static Func<T, bool> GreaterThan<T>(T actual) where T : struct
+        public static Func<T, bool> GreaterThan<T>(T actual)
+            where T: struct
         {
             return (expected) =>
             {
@@ -54,7 +62,7 @@ namespace FluentXUnit
         }
 
         public static Func<Action, bool> ErroringWith<T>()
-            where T : Exception
+            where T: Exception
         {
             return (method) =>
             {
@@ -77,6 +85,16 @@ namespace FluentXUnit
         public static Func<string, bool> EmptyString()
         {
             return (expected) => string.IsNullOrEmpty(expected.ToString());
+        }
+
+        public static Func<string, bool> MatchFor(string actual)
+        {
+            return (expected) => expected.Contains(actual);
+        }
+
+        public static Func<string, bool> MatchFor(Regex pattern)
+        {
+            return (expected) => pattern.IsMatch(expected);
         }
 
         public static Func<object, bool> Null()

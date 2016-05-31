@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
+using System.Text.RegularExpressions;
 
 namespace FluentXUnit
 {
@@ -268,6 +269,112 @@ namespace FluentXUnit
                     var testVar = new List<string>();
                     XAssert.That(testVar, IsNot.Empty());
                 });
+        }
+
+        [Fact]
+        public void TestContainsStringTrue()
+        {
+            XAssert.That("mystring", Is.MatchFor("str"));
+        }
+
+
+        [Fact]
+        public void TestContainsStringFalse()
+        {
+            Assert.Throws<XAssertionFailedException>(() =>
+                {
+                    XAssert.That("bibble", Is.MatchFor("str"));
+                });
+        }
+
+        [Fact]
+        public void TestContainsRegexTrue()
+        {
+            var re = new Regex("str");
+            XAssert.That("mystring", Is.MatchFor(re));
+        }
+
+
+        [Fact]
+        public void TestContainsRegexFalse()
+        {
+            Assert.Throws<XAssertionFailedException>(() =>
+                {
+                    var re = new Regex("str");
+                    XAssert.That("bibble", Is.MatchFor(re));
+                });
+        }
+
+        [Fact]
+        public void TestContainsItemTrue()
+        {
+            var test = new List<string> { "test" };
+            XAssert.That(test, Is.Storing("test"));
+        }
+
+
+        [Fact]
+        public void TestContainsItemFalse()
+        {
+            Assert.Throws<XAssertionFailedException>(() =>
+                {
+
+                    var test = new List<string> { "test" };
+                    XAssert.That(test, Is.Storing("test2"));
+                });
+        }
+
+        [Fact]
+        public void TestNotContainsStringTrue()
+        {
+            XAssert.That("bibble", IsNot.MatchFor("str"));
+        }
+
+
+        [Fact]
+        public void TestNotContainsStringFalse()
+        {
+            Assert.Throws<XAssertionFailedException>(() =>
+            {
+                XAssert.That("string", IsNot.MatchFor("str"));
+            });
+        }
+
+        [Fact]
+        public void TestNotContainsRegexTrue()
+        {
+            var re = new Regex("bibble");
+            XAssert.That("mystring", IsNot.MatchFor(re));
+        }
+
+
+        [Fact]
+        public void TestNotContainsRegexFalse()
+        {
+            Assert.Throws<XAssertionFailedException>(() =>
+            {
+                var re = new Regex("str");
+                XAssert.That("string", IsNot.MatchFor(re));
+            });
+        }
+
+        [Fact]
+        public void TestNotContainsItemTrue()
+        {
+            var test = new List<string> { "test2" };
+            XAssert.That(test, IsNot.Storing("test"));
+        }
+
+
+        [Fact]
+        public void TestNotContainsItemFalse()
+        {
+            Assert.Throws<XAssertionFailedException>(() =>
+            {
+
+                var test = new List<string> { "test2" };
+                XAssert.That(test, IsNot.Storing("test2"));
+            });
         }
     }
 }

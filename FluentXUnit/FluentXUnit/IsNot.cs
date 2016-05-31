@@ -29,6 +29,16 @@ namespace FluentXUnit
             return (expected) => Is.EmptyString()(expected) == false;
         }
 
+        public static Func<string, bool> MatchFor(string actual)
+        {
+            return (expected) => !Is.MatchFor(actual)(expected);
+        }
+
+        public static Func<string, bool> MatchFor(System.Text.RegularExpressions.Regex pattern)
+        {
+            return (expected) => !Is.MatchFor(pattern)(expected);
+        }
+
         public static Func<object, bool> Null()
         {
             return (expected) => Is.Null()(expected) == false;
@@ -42,6 +52,11 @@ namespace FluentXUnit
         public static Func<IEnumerable, bool> EmptyOrNull()
         {
             return (expected) => !Is.EmptyOrNull()(expected);
+        }
+
+        public static Func<IEnumerable<T>, bool> Storing<T>(T item)
+        {
+            return (expected) => !Is.Storing(item)(expected);
         }
 
         public static Func<Action, bool> ErroringWith<T>()
