@@ -4,7 +4,7 @@ using System.Linq;
 using Xunit;
 using System.Text.RegularExpressions;
 
-namespace FluentXUnit
+namespace FluentXUnit.Tests
 {
     public class FluentAssertTests
     {
@@ -382,7 +382,8 @@ namespace FluentXUnit
         {
             XAssert
                 .That("string", IsNot.EmptyString())
-                .And(Is.MatchFor("ing"));
+                .And(Is.MatchFor("ing"))
+                .And(Is.MatchFor("str"));
         }
 
         [Fact]

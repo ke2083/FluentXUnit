@@ -23,13 +23,13 @@ namespace FluentXUnit
         /// <param name="operation">The operation to evaluate the expected value for correctness.</param>
         /// <param name="message">The message to display if the assertion fails.</param>
         /// <exception cref="Exception">Thrown if the assertion is not true.</exception>
-        public static XAssert<TExpected> That<TExpected>
+        public static XAssertInner<TExpected> That<TExpected>
         (TExpected expected, Func<TExpected, bool> operation, string message = "Test failed")
         {
             if (!operation(expected))
                 throw new XAssertionFailedException(message);
 
-            return new XAssert<TExpected>(expected);
+            return new XAssertInner<TExpected>(expected);
         }
     }
 }
