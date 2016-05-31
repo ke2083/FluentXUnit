@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -26,6 +27,53 @@ namespace FluentXUnit
             };
         }
 
+        public static Func<IEnumerable, bool> EmptyOrNull()
+        {
+            return (expected) =>
+            {
+                if (expected == null)
+                    return true;
+
+                var en = expected.GetEnumerator();
+                if (en == null)
+                    return true;
+
+                en.Reset();
+                return !en.MoveNext();
+            };
+        }
+
+        public static Func<IEnumerable, bool> Empty()
+        {
+            return (expected) =>
+            {
+                var en = expected.GetEnumerator();
+                en.Reset();
+                return !en.MoveNext();
+            };
+        }
+
+        public static Func<Action, bool> ErroringWith<T>()
+            where T : Exception
+        {
+            return (method) =>
+            {
+                try
+                {
+                    method();
+                    return false;
+                }
+                catch (Exception e)
+                {
+                    if (e.GetType() == typeof(T))
+                        return true;
+
+                    else
+                        return false;
+                }
+            };
+        }
+
         public static Func<string, bool> EmptyString()
         {
             return (expected) => string.IsNullOrEmpty(expected.ToString());
@@ -33,7 +81,7 @@ namespace FluentXUnit
 
         public static Func<object, bool> Null()
         {
-            return (a) => a == null;
+            return (expected) => expected == null;
         }
     }
 }

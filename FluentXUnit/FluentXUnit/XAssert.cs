@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
+using System.Runtime.Serialization;
 
 namespace FluentXUnit
 {
+
     /// <summary>
     /// Provides a fluent Assert syntax for the xUnit test framework.
     /// </summary>
@@ -25,7 +27,7 @@ namespace FluentXUnit
             (T expected, Func<T, bool> operation, string message = "Test failed")
         {
             if (!operation(expected))
-                throw new Exception(message);
+                throw new XAssertionFailedException(message);
         }
     }
 }

@@ -22,7 +22,7 @@ namespace FluentXUnit
         [Fact]
         public void TestEqualityFalse()
         {
-            Assert.Throws<Exception>(() =>
+            Assert.Throws<XAssertionFailedException>(() =>
                 {
                     XAssert.That("A", Is.EqualTo("B"));
                 });
@@ -31,7 +31,7 @@ namespace FluentXUnit
         [Fact]
         public void TestInequalityFalse()
         {
-            Assert.Throws<Exception>(() =>
+            Assert.Throws<XAssertionFailedException>(() =>
                 {
                     XAssert.That("A", IsNot.EqualTo("A"));
                 });
@@ -46,7 +46,7 @@ namespace FluentXUnit
         [Fact]
         public void TestLessThanFalse()
         {
-            Assert.Throws<Exception>(() =>
+            Assert.Throws<XAssertionFailedException>(() =>
                 {
                     XAssert.That(2, Is.LessThan(1));
                 });
@@ -61,7 +61,7 @@ namespace FluentXUnit
         [Fact]
         public void TestNotLessThanFalse()
         {
-            Assert.Throws<Exception>(() =>
+            Assert.Throws<XAssertionFailedException>(() =>
                 {
                     XAssert.That(1, IsNot.LessThan(2));
                 });
@@ -76,7 +76,7 @@ namespace FluentXUnit
         [Fact]
         public void TestGreaterThanFalse()
         {
-            Assert.Throws<Exception>(() =>
+            Assert.Throws<XAssertionFailedException>(() =>
                 {
                     XAssert.That(1, Is.GreaterThan(2));
                 });
@@ -91,7 +91,7 @@ namespace FluentXUnit
         [Fact]
         public void TestNotGreaterThanFalse()
         {
-            Assert.Throws<Exception>(() =>
+            Assert.Throws<XAssertionFailedException>(() =>
                 {
                     XAssert.That(2, IsNot.GreaterThan(1));
                 });
@@ -106,7 +106,7 @@ namespace FluentXUnit
         [Fact]
         public void TestIsEmptyStringFalse()
         {
-            Assert.Throws<Exception>(() =>
+            Assert.Throws<XAssertionFailedException>(() =>
                 {
                     XAssert.That("Test", Is.EmptyString());
                 });
@@ -121,7 +121,7 @@ namespace FluentXUnit
         [Fact]
         public void TestIsNotEmptyStringFalse()
         {
-            Assert.Throws<Exception>(() =>
+            Assert.Throws<XAssertionFailedException>(() =>
                 {
                     XAssert.That(string.Empty, IsNot.EmptyString());
                 });
@@ -136,7 +136,7 @@ namespace FluentXUnit
         [Fact]
         public void TestIsNullFalse()
         {
-            Assert.Throws<Exception>(() =>
+            Assert.Throws<XAssertionFailedException>(() =>
                 {
                     XAssert.That("test", Is.Null());
                 });
@@ -151,9 +151,122 @@ namespace FluentXUnit
         [Fact]
         public void TestNotNullFalse()
         {
-            Assert.Throws<Exception>(() =>
+            Assert.Throws<XAssertionFailedException>(() =>
                 {
                     XAssert.That(null, IsNot.Null());
+                });
+        }
+
+        [Fact]
+        public void TestErroringWithTrue()
+        {
+            XAssert.That(() =>
+                {
+                    throw new XAssertionFailedException();
+                }, Is.ErroringWith<XAssertionFailedException>());
+        }
+
+
+        [Fact]
+        public void TestErroringWithFalse()
+        {
+            Assert.Throws<XAssertionFailedException>(() =>
+                {
+                    XAssert.That(() =>
+                        {
+                            throw new XAssertionFailedException();
+                        }, Is.ErroringWith<System.IO.DirectoryNotFoundException>());
+                });
+        }
+
+        [Fact]
+        public void TestEmptyOrNullWithTrue()
+        {
+            ICollection<string> testVar = null;
+            XAssert.That(testVar, Is.EmptyOrNull());
+        }
+
+
+        [Fact]
+        public void TestEmptyOrNullWithFalse()
+        {
+            Assert.Throws<XAssertionFailedException>(() =>
+                {
+                    ICollection<string> testVar = new List<string> { "test" };
+                    XAssert.That(testVar, Is.EmptyOrNull());
+                });
+        }
+
+        [Fact]
+        public void TestEmptyWithTrue()
+        {
+            var testVar = new List<string>();
+            XAssert.That(testVar, Is.Empty());
+        }
+
+
+        [Fact]
+        public void TestEmptyWithFalse()
+        {
+            Assert.Throws<XAssertionFailedException>(() =>
+                {
+                    var testVar = new List<string> { "test" };
+                    XAssert.That(testVar, Is.Empty());
+                });
+        }
+
+        [Fact]
+        public void TestNotErroringWithTrue()
+        {
+            XAssert.That(() =>
+                {
+                    var a = 1;
+                }, IsNot.ErroringWith<XAssertionFailedException>());
+        }
+
+
+        [Fact]
+        public void TestNotErroringWithFalse()
+        {
+            XAssert.That(() =>
+                {
+                    var a = 1;
+                }, IsNot.ErroringWith<System.IO.DirectoryNotFoundException>());
+        }
+
+        [Fact]
+        public void TestNotEmptyOrNullWithTrue()
+        {
+            ICollection<string> testVar = new List<string> { "test" };
+            XAssert.That(testVar, IsNot.EmptyOrNull());
+        }
+
+
+        [Fact]
+        public void TestNotEmptyOrNullWithFalse()
+        {
+            Assert.Throws<XAssertionFailedException>(() =>
+                {
+                    ICollection<string> testVar = new List<string>();
+                    XAssert.That(testVar, IsNot.EmptyOrNull());
+                });
+        }
+
+        [Fact]
+        public void TestNotEmptyWithTrue()
+        {
+            var testVar = new List<string>() { "test" };
+            XAssert.That(testVar, IsNot.Empty());
+        }
+
+
+        [Fact]
+        public void TestNotEmptyWithFalse()
+        {
+            Assert.Throws<XAssertionFailedException>(() =>
+                {
+                    var testVar = new List<string>();
+                    XAssert.That(testVar, IsNot.Empty());
                 });
         }
     }
