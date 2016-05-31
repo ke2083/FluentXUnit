@@ -109,3 +109,10 @@ and negated:
     var test2 = new List<string> { "test2" };
     XAssert.That(test2, IsNot.Storing("test"));
 
+## Chaining
+
+You can chain together assertions on the same variable, for example:
+
+    XAssert
+      .That("test", IsNot.Null())
+      .And(Is.EqualTo("test"));

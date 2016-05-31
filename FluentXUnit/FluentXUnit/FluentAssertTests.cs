@@ -376,6 +376,40 @@ namespace FluentXUnit
                 XAssert.That(test, IsNot.Storing("test2"));
             });
         }
-    }
+
+        [Fact]
+        public void TestsCanBeChained()
+        {
+            XAssert
+                .That("string", IsNot.Null())
+                .And(Is.MatchFor("ing"));
+        }
+
+        [Fact]
+        public void TestsCanBeChainedFirstFails()
+        {
+            Assert.Throws<XAssertionFailedException>(() =>
+                {
+
+                    XAssert.That(null, IsNot.Null())
+                        .And(Is.EqualTo("test"));
+
+                });
+        }
+
+
+        [Fact]
+        public void TestsCanBeChainedSecondFails()
+        {
+            Assert.Throws<XAssertionFailedException>(() =>
+            {
+
+                XAssert.That("test2", IsNot.Null())
+                    .And(Is.EqualTo("test"));
+
+            });
+        }
+    
+}
 }
 
