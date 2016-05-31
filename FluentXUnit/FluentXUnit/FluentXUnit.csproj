@@ -62,6 +62,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="XAssert`TInner.cs" />
     <Compile Include="XAssert.cs" />
     <Compile Include="FluentAssertTests.cs" />
     <Compile Include="Is.cs" />

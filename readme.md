@@ -81,6 +81,19 @@ and negated:
     var testVar2 = new List<string>() { "test" };
     XAssert.That(testVar2, IsNot.Empty());
 
+### Assert that a collection contains an item (identified by an inline Func):
+
+    var myList = new List<Person> {
+        new Person { Name = "Kaylee", Age = 33 },
+        new Person { Name = "Cloud", Age = 29 }
+    };
+
+    XAssert.That(myList, Is.Storing<Person>(l => l.Name == "Kaylee"));    
+
+and negated:
+
+    XAssert.That(myList, IsNot.Storing<Person>(l => l.Name == "Biff"));    
+
 ### Assert that one string contains another:
 
     XAssert.That("mystring", Is.MatchFor("str"));
@@ -108,6 +121,22 @@ and negated:
 
     var test2 = new List<string> { "test2" };
     XAssert.That(test2, IsNot.Storing("test"));
+
+### Assert something is true:
+
+    XAssert.That(true, Is.True());
+
+and negated:
+
+    XAssert.That(true, IsNot.True());    
+
+### Assert something is false:
+
+    XAssert.That(true, Is.False());
+
+and negated:
+
+    XAssert.That(true, IsNot.False());    
 
 ## Chaining
 

@@ -335,9 +335,9 @@ namespace FluentXUnit
         public void TestNotContainsStringFalse()
         {
             Assert.Throws<XAssertionFailedException>(() =>
-            {
-                XAssert.That("string", IsNot.MatchFor("str"));
-            });
+                {
+                    XAssert.That("string", IsNot.MatchFor("str"));
+                });
         }
 
         [Fact]
@@ -352,10 +352,10 @@ namespace FluentXUnit
         public void TestNotContainsRegexFalse()
         {
             Assert.Throws<XAssertionFailedException>(() =>
-            {
-                var re = new Regex("str");
-                XAssert.That("string", IsNot.MatchFor(re));
-            });
+                {
+                    var re = new Regex("str");
+                    XAssert.That("string", IsNot.MatchFor(re));
+                });
         }
 
         [Fact]
@@ -370,18 +370,18 @@ namespace FluentXUnit
         public void TestNotContainsItemFalse()
         {
             Assert.Throws<XAssertionFailedException>(() =>
-            {
+                {
 
-                var test = new List<string> { "test2" };
-                XAssert.That(test, IsNot.Storing("test2"));
-            });
+                    var test = new List<string> { "test2" };
+                    XAssert.That(test, IsNot.Storing("test2"));
+                });
         }
 
         [Fact]
         public void TestsCanBeChained()
         {
             XAssert
-                .That("string", IsNot.Null())
+                .That("string", IsNot.EmptyString())
                 .And(Is.MatchFor("ing"));
         }
 
@@ -391,7 +391,8 @@ namespace FluentXUnit
             Assert.Throws<XAssertionFailedException>(() =>
                 {
 
-                    XAssert.That(null, IsNot.Null())
+                    XAssert
+                        .That(null, IsNot.EmptyString())
                         .And(Is.EqualTo("test"));
 
                 });
@@ -402,14 +403,140 @@ namespace FluentXUnit
         public void TestsCanBeChainedSecondFails()
         {
             Assert.Throws<XAssertionFailedException>(() =>
-            {
+                {
 
-                XAssert.That("test2", IsNot.Null())
-                    .And(Is.EqualTo("test"));
+                    XAssert
+                        .That("test2", IsNot.EmptyString())
+                        .And(Is.EqualTo("test"));
 
-            });
+                });
         }
-    
-}
+
+        [Fact]
+        public void TestIsTrueTrue()
+        {
+            XAssert.That(true, Is.True());
+        }
+
+        [Fact]
+        public void TestIsTrueFalse()
+        {
+            Assert.Throws<XAssertionFailedException>(() =>
+                {
+                    XAssert.That(true, Is.False());
+                });
+        }
+
+        [Fact]
+        public void TestIsFalseTrue()
+        {
+            XAssert.That(false, Is.False());
+        }
+
+        [Fact]
+        public void TestIsFalseFalse()
+        {
+            Assert.Throws<XAssertionFailedException>(() =>
+                {
+                    XAssert.That(false, Is.True());
+                });
+        }
+
+        [Fact]
+        public void TestIsNotTrueTrue()
+        {
+            XAssert.That(false, IsNot.True());
+        }
+
+        [Fact]
+        public void TestIsNotTrueFalse()
+        {
+            Assert.Throws<XAssertionFailedException>(() =>
+                {
+                    XAssert.That(true, IsNot.True());
+                });
+        }
+
+        [Fact]
+        public void TestIsNotFalseTrue()
+        {
+            XAssert.That(true, IsNot.False());
+        }
+
+        [Fact]
+        public void TestIsNotFalseFalse()
+        {
+            Assert.Throws<XAssertionFailedException>(() =>
+                {
+                    XAssert.That(false, IsNot.False());
+                });
+        }
+
+        private class Person
+        {
+            public string Name;
+            public int Age;
+        }
+
+        [Fact]
+        public void TestContainsWithQueryTrue()
+        {
+            var myList = new List<Person> {
+                new Person { Name = "Kaylee", Age = 33 },
+                new Person { Name = "Cloud", Age = 29 }
+            };
+
+            XAssert.That(myList, Is.Storing<Person>(l => l.Name == "Kaylee"));
+        }
+
+        [Fact]
+        public void TestContainsWithQueryFalse()
+        {
+            var myList = new List<Person> {
+                new Person { Name = "Kaylee", Age = 33 },
+                new Person { Name = "Cloud", Age = 29 }
+            };
+
+            Assert.Throws<XAssertionFailedException>(() =>
+                {
+                    XAssert.That(myList, Is.Storing<Person>(l => l.Name == "Biff"));
+                });
+        }
+
+        [Fact]
+        public void TestNotContainsWithQueryTrue()
+        {
+            var myList = new List<Person> {
+                new Person { Name = "Kaylee", Age = 33 },
+                new Person { Name = "Cloud", Age = 29 }
+            };
+
+            Assert.Throws<XAssertionFailedException>(() =>
+                {
+                    XAssert.That(myList, IsNot.Storing<Person>(l => l.Name == "Kaylee"));
+                });
+        }
+
+        [Fact]
+        public void TestNotContainsWithQueryFalse()
+        {
+            var myList = new List<Person> {
+                new Person { Name = "Kaylee", Age = 33 },
+                new Person { Name = "Cloud", Age = 29 }
+            };
+
+
+            XAssert.That(myList, IsNot.Storing<Person>(l => l.Name == "Biff"));
+        }
+
+        [Fact]
+        public void TestChainedWithQueryTrue()
+        {
+            var myList = new List<int> { 1, 2, 3 };
+            XAssert
+                .That(myList, IsNot.Null<List<int>>())
+                .And(m => m.Count, Is.EqualTo(3));
+        }
+    }
 }
 

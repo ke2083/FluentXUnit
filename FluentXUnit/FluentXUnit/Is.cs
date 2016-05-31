@@ -8,6 +8,11 @@ namespace FluentXUnit
 {
     public static class Is
     {
+        public static Func<bool, bool> False()
+        {
+            return (expected) => expected == false;
+        }
+
         public static Func<IEnumerable<T>, bool> Storing<T>(T item)
         {
             return (expected) => expected.Contains(item);
@@ -84,7 +89,7 @@ namespace FluentXUnit
 
         public static Func<string, bool> EmptyString()
         {
-            return (expected) => string.IsNullOrEmpty(expected.ToString());
+            return (expected) => expected == null || string.IsNullOrEmpty(expected.ToString());
         }
 
         public static Func<string, bool> MatchFor(string actual)
@@ -95,6 +100,21 @@ namespace FluentXUnit
         public static Func<string, bool> MatchFor(Regex pattern)
         {
             return (expected) => pattern.IsMatch(expected);
+        }
+
+        public static Func<IEnumerable<T>, bool> Storing<T>(Func<T, bool> query)
+        {
+            return (expected) => expected.Any(query);
+        }
+
+        public static Func<bool, bool> True()
+        {
+            return (expected) => expected == true;
+        }
+
+        public static Func<T, bool> Null<T>() where T : class
+        {
+            return (expected) => expected == null;
         }
 
         public static Func<object, bool> Null()
