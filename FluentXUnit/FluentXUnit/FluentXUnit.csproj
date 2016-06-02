@@ -68,6 +68,7 @@
     <Compile Include="IsNot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XAssertionFailedException.cs" />
+    <Compile Include="XAssertionOperationResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FluentXUnit.nuspec" />

@@ -7,83 +7,91 @@ namespace FluentXUnit
 {
     public static class IsNot
     {
-        public static Func<T, bool> EqualTo<T>(T actual)
+        private static XAssertionOperationResult Negate(XAssertionOperationResult result, string message)
         {
-            return (expected) => Is.EqualTo(actual)(expected) == false;
+            result.Result = !result.Result;
+            result.Detail = message;
+            return result;
         }
 
-        public static Func<bool, bool> False()
+        public static Func<T, XAssertionOperationResult> EqualTo<T>(T actual)
         {
-            return (expected) => !Is.False()(expected);
+            return (expected) =>
+                Negate(Is.EqualTo(actual)(expected), string.Format("{0} is equal to {1}", expected , actual));
         }
 
-        public static Func<T, bool> LessThan<T>(T actual)
+        public static Func<bool, XAssertionOperationResult> False()
+        {
+            return (expected) => Negate(Is.False()(expected), string.Format("{0} is false", expected));
+        }
+
+        public static Func<T, XAssertionOperationResult> LessThan<T>(T actual)
             where T: struct
         {
-            return (expected) => Is.LessThan(actual)(expected) == false;
+            return (expected) => Negate(Is.LessThan(actual)(expected), string.Format("{0} is less than{1}", expected, actual));
         }
 
-        public static Func<T, bool> GreaterThan<T>(T actual)
+        public static Func<T, XAssertionOperationResult> GreaterThan<T>(T actual)
             where T: struct
         {
-            return (expected) => Is.GreaterThan(actual)(expected) == false;
+            return (expected) => Negate(Is.GreaterThan(actual)(expected), string.Format("{0} is greater than {1}", expected, actual));
         }
 
-        public static Func<string, bool> EmptyString()
+        public static Func<string, XAssertionOperationResult> EmptyString()
         {
-            return (expected) => Is.EmptyString()(expected) == false;
+            return (expected) => Negate(Is.EmptyString()(expected), string.Format("{0} is empty string", expected));
         }
 
-        public static Func<string, bool> MatchFor(string actual)
+        public static Func<string, XAssertionOperationResult> MatchFor(string actual)
         {
-            return (expected) => !Is.MatchFor(actual)(expected);
+            return (expected) => Negate(Is.MatchFor(actual)(expected), string.Format("{0} is matched by {1}", expected, actual));
         }
 
-        public static Func<string, bool> MatchFor(System.Text.RegularExpressions.Regex pattern)
+        public static Func<string, XAssertionOperationResult> MatchFor(System.Text.RegularExpressions.Regex pattern)
         {
-            return (expected) => !Is.MatchFor(pattern)(expected);
+            return (expected) => Negate(Is.MatchFor(pattern)(expected), string.Format("{0} is matched by pattern {1}", expected, pattern));
         }
 
-        public static Func<T, bool> Null<T>()
+        public static Func<T, XAssertionOperationResult> Null<T>()
             where T: class
         {
-            return (expected) => Is.Null<T>()(expected) == false;
+            return (expected) => Negate(Is.Null<T>()(expected), string.Format("{0} is null", expected));
         }
 
-        public static Func<IEnumerable, bool> Empty()
+        public static Func<IEnumerable, XAssertionOperationResult> Empty()
         {
-            return (expected) => !Is.Empty()(expected);
+            return (expected) => Negate(Is.Empty()(expected), string.Format("{0} is empty", expected));
         }
 
-        public static Func<IEnumerable, bool> EmptyOrNull()
+        public static Func<IEnumerable, XAssertionOperationResult> EmptyOrNull()
         {
-            return (expected) => !Is.EmptyOrNull()(expected);
+            return (expected) => Negate(Is.EmptyOrNull()(expected), expected + " is empty or null");
         }
 
-        public static Func<object, bool> Null()
+        public static Func<object, XAssertionOperationResult> Null()
         {
-            return (expected) => !Is.Null()(expected);
+            return (expected) => Negate(Is.Null()(expected), string.Format("{0} is null", expected));
         }
 
-        public static Func<IEnumerable<T>, bool> Storing<T>(T item)
+        public static Func<IEnumerable<T>, XAssertionOperationResult> Storing<T>(T item)
         {
-            return (expected) => !Is.Storing(item)(expected);
+            return (expected) => Negate(Is.Storing(item)(expected), string.Format("{0} does not contain element {1}", expected, item));
         }
 
-        public static Func<IEnumerable<T>, bool> Storing<T>(Func<T, bool> query)
+        public static Func<IEnumerable<T>, XAssertionOperationResult> Storing<T>(Func<T, bool> query)
         {
-            return (expected) => !Is.Storing(query)(expected);
+            return (expected) => Negate(Is.Storing(query)(expected), string.Format("{0} does not contain any elements matching query", expected));
         }
 
-        public static Func<bool, bool> True()
+        public static Func<bool, XAssertionOperationResult> True()
         {
-            return (expected) => !Is.True()(expected);
+            return (expected) => Negate(Is.True()(expected), string.Format("{0} is not true", expected));
         }
 
-        public static Func<Action, bool> ErroringWith<T>()
+        public static Func<Action, XAssertionOperationResult> ErroringWith<T>()
             where T: Exception
         {
-            return (method) => !Is.ErroringWith<T>()(method);
+            return (method) => Negate(Is.ErroringWith<T>()(method), "Method is throwing exception");
         }
     }
 }

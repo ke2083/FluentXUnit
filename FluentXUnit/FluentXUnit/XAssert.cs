@@ -24,10 +24,11 @@ namespace FluentXUnit
         /// <param name="message">The message to display if the assertion fails.</param>
         /// <exception cref="Exception">Thrown if the assertion is not true.</exception>
         public static XAssertInner<TExpected> That<TExpected>
-        (TExpected expected, Func<TExpected, bool> operation, string message = "Test failed")
+        (TExpected expected, Func<TExpected, XAssertionOperationResult> operation, string message = "Test failed")
         {
-            if (!operation(expected))
-                throw new XAssertionFailedException(message);
+            var result = operation(expected);
+            if (!result.Result)
+                throw new XAssertionFailedException(string.Format("{0} - {1}", message, result.Detail));
 
             return new XAssertInner<TExpected>(expected);
         }
