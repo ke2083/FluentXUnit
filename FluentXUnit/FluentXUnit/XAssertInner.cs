@@ -20,16 +20,18 @@ namespace FluentXUnit
 
         public XAssertInner<TInner> And(Func<TInner, XAssertionOperationResult> operation, string message = "Test failed")
         {
-            if (!operation(Inner).Result)
-                throw new XAssertionFailedException(message);
+            var result = operation(Inner);
+            if (!result.Result)
+                throw new XAssertionFailedException(string.Format("{0} - {1}", message, result.Detail));
 
             return this;
         }
 
         public XAssertInner<TInner> And<S>(Func<TInner, S> transform, Func<S, XAssertionOperationResult> operation, string message = "Test failed")
         {
-            if (!operation(transform(Inner)).Result)
-                throw new XAssertionFailedException(message);
+            var result = operation(transform(Inner));
+            if (!result.Result)
+                throw new XAssertionFailedException(string.Format("{0} - {1}", message, result.Detail));
 
             return this;
         }
